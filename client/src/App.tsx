@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
+import { addUser } from './api/addUser';
+import { deleteUser } from './api/deleteUser';
+import { getUsers, TUser } from './api/getUsers';
 import './App.css'
-
-type TUser = {
-  firstName: string;
-  _id: string;
-}
 
 function App() {
 
@@ -14,34 +12,20 @@ function App() {
 
   async function handleCreateUser(e: React.FormEvent) {
     e.preventDefault();
-
-    const response = await fetch("http://localhost:5000/usersList", { // Optimistic update, more performance
-      method: "POST",
-      body: JSON.stringify({
-        firstName,
-      }),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    const user = await response.json(); // Optimistic update, more performance
-    setUsers([...users, user]) // Optimistic update, more performance
+    const user = await addUser(firstName);
+    setUsers([...users, user])
     setFirstName("")
   }
 
   async function handleDeleteUser(userId: string) {
-    await fetch(`http://localhost:5000/usersList/${userId}`, {
-      method: "DELETE",
-    })
+    await deleteUser(userId)
     setUsers(users.filter(user => user._id !== userId)) // Optimistic update, more performance
   }
 
   useEffect(() => {
     async function fetchUsers() {
-      const response = await fetch("http://localhost:5000/usersList");
-      const newUsers = await response.json();
+      const newUsers = await getUsers();
       setUsers(newUsers)
-      console.log(newUsers)
     }
     fetchUsers();
   }, [])
