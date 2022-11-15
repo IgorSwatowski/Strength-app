@@ -9,6 +9,7 @@ import {
 import './index.css'
 import UserProfile from './UserProfile';
 import RegisterView from './views/Register/RegisterView';
+import LoginView from './views/Login/LoginView';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <RegisterView />
+  },
+  {
+    path: "/login",
+    element: <LoginView />
   }
 ]);
 
