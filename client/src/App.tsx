@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 import './App.css'
 
 type TUser = {
@@ -51,7 +52,7 @@ function App() {
       <div className="users">
         {users.map((user) => (
           <li key={user._id}>
-            {user.firstName}
+            <Link to={`/profile/${user._id}`}>{user.firstName}</Link>
             <button onClick={() => handleDeleteUser(user._id)}>Delete</button>
           </li>
         ))}
