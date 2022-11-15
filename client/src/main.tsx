@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import './index.css'
 import UserProfile from './UserProfile';
+import RegisterView from './views/Register/RegisterView';
 
 const router = createBrowserRouter([
   {
@@ -15,8 +16,12 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/profile/:userId",
+    path: "/profile",
     element: <UserProfile /> 
+  },
+  {
+    path: "/register",
+    element: <RegisterView />
   }
 ]);
 
