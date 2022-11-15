@@ -4,20 +4,29 @@ import { config } from "dotenv"
 config();
 import express, { Request, Response } from "express";
 import mongoose from 'mongoose';
+import cors from "cors"
 
 import User from "./models/User"
 
 const PORT = 5000;
 const app = express();
 
+app.use(cors({ 
+    origin: "*"}
+));
 app.use(express.json());
 
-app.get("/usersList", (req: Request, res: Response) => {
-    res.send("hello world");
+
+app.get("/dashboard", (req: Request, res: Response) => {
+    res.send("Witaj w dashboard")
 })
 
-app.post("/register", async (req: Request, res: Response) => {
-    console.log(req.body)
+app.get("/usersList", async (req: Request, res: Response) => {
+    const users = await User.find();
+    res.json(users)
+})
+
+app.post("/users", async (req: Request, res: Response) => {
     const newUser = new User({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
