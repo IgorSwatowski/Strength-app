@@ -6,9 +6,8 @@ export async function addUserController(req: Request, res: Response) {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         age: req.body.age,
-        emailAddress: req.body.emailAddress,
-        weight: req.body.weight,
-        height: req.body.height
+        email: req.body.email,
+        password: req.body.password,
     });
     const createdUser = await newUser.save();
     res.json(createdUser)
