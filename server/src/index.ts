@@ -19,9 +19,15 @@ app.use(cors(
     ));
 app.use(express.json());
 
+// Get all users
 app.get("/users", getUsersController);
+
+// Delete user by id
 app.delete("/users/:userId", deleteUserController)
-app.post("/users", addUserController)
+
+// Register new user
+app.post("/register", addUserController)
+
 
 mongoose.connect(process.env.MONGO_URL!).then(() => {
     console.log(`Listening on port ${PORT}`)
