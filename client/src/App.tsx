@@ -1,32 +1,71 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import React, { useEffect, useState } from 'react'
 import './App.css'
 
+type TUser = {
+  firstName: string;
+  _id: string;
+}
+
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [firstName, setFirstName] = useState('');
+  const [users, setUsers] = useState<TUser[]>([]);
+
+  async function handleCreateUser(e: React.FormEvent) {
+    e.preventDefault();
+
+    const response = await fetch("http://localhost:5000/usersList", { // Optimistic update, more performance
+      method: "POST",
+      body: JSON.stringify({
+        firstName,
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    const user = await response.json(); // Optimistic update, more performance
+    setUsers([...users, user]) // Optimistic update, more performance
+    setFirstName("")
+  }
+
+  async function handleDeleteUser(userId: string) {
+    await fetch(`http://localhost:5000/usersList/${userId}`, {
+      method: "DELETE",
+    })
+    setUsers(users.filter(user => user._id !== userId)) // Optimistic update, more performance
+  }
+
+  useEffect(() => {
+    async function fetchUsers() {
+      const response = await fetch("http://localhost:5000/usersList");
+      const newUsers = await response.json();
+      setUsers(newUsers)
+      console.log(newUsers)
+    }
+    fetchUsers();
+  }, [])
+
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="users">
+        {users.map((user) => (
+          <li key={user._id}>
+            {user.firstName}
+            <button onClick={() => handleDeleteUser(user._id)}>Delete</button>
+          </li>
+        ))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <form onSubmit={handleCreateUser}>
+        <label htmlFor="firstName">Register your account now.</label>
+        <input id="firstName"
+          value={firstName}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+            setFirstName(e.target.value)
+          }
+        />
+        <button>Register</button>
+      </form>
     </div>
   )
 }

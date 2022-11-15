@@ -16,17 +16,18 @@ app.use(cors({
 ));
 app.use(express.json());
 
-
-app.get("/dashboard", (req: Request, res: Response) => {
-    res.send("Witaj w dashboard")
-})
-
 app.get("/usersList", async (req: Request, res: Response) => {
     const users = await User.find();
     res.json(users)
 })
 
-app.post("/users", async (req: Request, res: Response) => {
+app.delete("/usersList/:userId", async (req: Request, res: Response) => {
+    const userId = req.params.userId;
+    const user = await User.findByIdAndDelete(userId);
+    res.json(user)
+})
+
+app.post("/usersList", async (req: Request, res: Response) => {
     const newUser = new User({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
