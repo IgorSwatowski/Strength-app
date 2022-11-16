@@ -10,6 +10,7 @@ import './index.css'
 import UserProfile from './UserProfile';
 import RegisterView from './views/Register/RegisterView';
 import LoginView from './views/Login/LoginView';
+import DashboardView from './views/Dashboard/DashboardView';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginView />
+  },
+  {
+    path: "/dashboard",
+    element: <DashboardView />
   }
 ]);
 
