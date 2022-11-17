@@ -4,17 +4,17 @@ import express from "express";
 import mongoose from 'mongoose';
 import cors from "cors"
 import cookieParser from "cookie-parser";
+import { Express, Request, Response} from 'express';
 
 import { getUsersController } from "../controllers/getUsersController";
 import { deleteUserController } from "../controllers/deleteUserController";
 import { addUserController } from "../controllers/addUserController";
 import { loginUserController } from "../controllers/loginUserController";
 
-// import privateRoutes from "../routes/private";
 import { checkAuth } from "../middlewares/checkAuth";
 
 const PORT = 5000;
-const app = express();
+const app: Express = express();
 app.use(cookieParser());
 config();
 
@@ -37,9 +37,8 @@ app.post("/register", addUserController)
 // Login user
 app.post("/login", loginUserController)
 
-app.get("/dashboard", checkAuth, (req, res) => {
-    res.json("You are in private route")
-})
+// Dashboard 
+app.get("/dashboard", checkAuth)
 
 mongoose.connect(process.env.MONGO_URL!).then(() => {
     console.log(`Listening on port ${PORT}`)

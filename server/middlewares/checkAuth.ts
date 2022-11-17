@@ -1,7 +1,13 @@
 import jwt from "jsonwebtoken"
 import { Request, Response } from "express";
 
-export const checkAuth = (req: any, res: any, next: any) => {
+export interface IAuthUser extends Request {
+    user?: {
+        id: string;
+    };
+}
+
+export const checkAuth = (req: IAuthUser, res: Response) => {
     const token = req.cookies.access_token;
 
     if (!token) {
@@ -15,6 +21,5 @@ export const checkAuth = (req: any, res: any, next: any) => {
         req.user = {
             id: payload.id
         }
-        next();
     })
 }
