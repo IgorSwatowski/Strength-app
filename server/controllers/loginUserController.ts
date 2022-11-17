@@ -11,13 +11,13 @@ export async function loginUserController(req: Request, res: Response) {
             email: req.body.email
         })
         if (!user) {
-            res.status(404).json("Your credentials is invalid")
+            return res.status(404).json("Your credentials is invalid")
         }
 
         const isPasswordCorrect = await bcrypt.compare(req.body.password, user.password)
 
         if (!isPasswordCorrect) {
-            res.status(404).json("Your credentials is invalid")
+            return res.status(404).json("Your credentials is invalid")
         }
 
         const payload = {
@@ -35,6 +35,6 @@ export async function loginUserController(req: Request, res: Response) {
     }
 
     catch(err) {
-        res.status(500).json(err.message)
+        res.status(500).json(err)
     }
 }
