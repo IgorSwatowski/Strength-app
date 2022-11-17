@@ -1,11 +1,11 @@
+// import express from "express";
+// import { checkAuth } from "../middlewares/checkAuth.js";
 
-import { Request, Response } from "express";
-import express from "express";
+// const router = express.Router();
 
-const router = express.Router();
+// router.get('/', checkAuth, (req, res) => {
+//   console.log(req.user);
+//   res.json("You got the private route");
+// })
 
-router.get("/", (req: Request, res: Response) => {
-    res.json("You are in private route")
-})
-
-export default router;
+// export default router;
