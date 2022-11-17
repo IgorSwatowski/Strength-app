@@ -6,8 +6,14 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const UserSchema = new Schema({
     id: ObjectId,
-    firstName: String,
-    lastName: String,
+    firstName: {
+        required: true,
+        type: String,
+    },
+    lastName: {
+        required: true,
+        type: String,
+    },
     age: String,
     email: {
         type: String,
