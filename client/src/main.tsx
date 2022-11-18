@@ -1,42 +1,29 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
 import {
+  BrowserRouter,
   createBrowserRouter,
+  Route,
+  Router,
   RouterProvider,
+  Routes,
 } from "react-router-dom";
-import UserProfile from './views/UserProfile';
 import RegisterView from './views/Register/RegisterView';
 import LoginView from './views/Login/LoginView';
 import DashboardView from './views/Dashboard/DashboardView';
+import HomeView from './views/Home/HomeView';
 import Navbar from './components/Navbar/Navbar';
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-  },
-  {
-    path: "/profile",
-    element: <UserProfile /> 
-  },
-  {
-    path: "/register",
-    element: <RegisterView />
-  },
-  {
-    path: "/login",
-    element: <LoginView />
-  },
-  {
-    path: "/dashboard",
-    element: <DashboardView />
-  }
-]);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <Navbar />
-    <RouterProvider router={router} />
+    <BrowserRouter >
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<HomeView />} />
+          <Route path="/register" element={<RegisterView />} />
+          <Route path="/login" element={<LoginView />} />
+          <Route path="/dashboard" element={<DashboardView />} />
+        </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 )
