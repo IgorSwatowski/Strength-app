@@ -3,10 +3,10 @@ import React, { useState } from 'react'
 import { addUser } from '../../api/addUser';
 import { TUser } from '../../api/getUsers';
 import { Link, useNavigate } from "react-router-dom"
+import { useSignup } from '../../hooks/useSignup';
 
 const LoginView = () => {
     const [users, setUsers] = useState<TUser[]>([]);
-    const [error, setError ] = useState("")
     const [data, setData] = useState({
         email: "",
         password: "",
@@ -19,23 +19,10 @@ const LoginView = () => {
         })
     }
 
-    const handleSubmit = async (e: any) => {
-        e.preventDefault();
-
-        try {
-            const url = "http://localhost:5000/login";
-            const { data: res } = await axios.post(url, data)
-            localStorage.setItem("userInfo", JSON.stringify(res.data))
-            console.log(res.message)
-        }
-
-        catch(error) {
-            setError("error")
-        }
-    }
+      
     return (
         <div className="register-form">
-            <form onSubmit={handleSubmit} id="form">
+            <form id="form">
                 <div className="form-email">
                     <label htmlFor="email">Email</label>
                     <input id="email"
@@ -53,7 +40,6 @@ const LoginView = () => {
                     onChange={handleChange}
                     /> 
                 </div>
-                { error && <h1>{error}</h1>}
                 <button>Login</button>
             </form>
             New Customer ? <Link to="/register">Register Here</Link>

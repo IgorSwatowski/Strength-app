@@ -8,22 +8,15 @@ import {
   RouterProvider,
   Routes,
 } from "react-router-dom";
-import RegisterView from './views/Register/RegisterView';
-import LoginView from './views/Login/LoginView';
-import DashboardView from './views/Dashboard/DashboardView';
-import HomeView from './views/Home/HomeView';
-import Navbar from './components/Navbar/Navbar';
+import App from './App';
+
+import { AuthContextProvider } from './context/AuthContext';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+  
   <React.StrictMode>
-    <BrowserRouter >
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<HomeView />} />
-          <Route path="/register" element={<RegisterView />} />
-          <Route path="/login" element={<LoginView />} />
-          <Route path="/dashboard" element={<DashboardView />} />
-        </Routes>
-    </BrowserRouter>
+    <AuthContextProvider>
+      <App />
+    </AuthContextProvider>
   </React.StrictMode>
 )

@@ -3,10 +3,12 @@ import React, { useState } from 'react'
 import { addUser } from '../../api/addUser';
 import { TUser } from '../../api/getUsers';
 import { Link, useNavigate } from "react-router-dom"
+import { useSignup } from '../../hooks/useSignup';
 
 const RegisterView = () => {
     const [users, setUsers] = useState<TUser[]>([]);
-    const [error, setError ] = useState("")
+    const {signup, error, isLoading} = useSignup()
+
     const [data, setData] = useState({
         firstName: "",
         lastName: "",
@@ -24,20 +26,12 @@ const RegisterView = () => {
         })
     }
 
-    const handleSubmit = async (e: any) => {
-        e.preventDefault();
-
-        try {
-            const url = "http://localhost:5000/register";
-            const { data: res } = await axios.post(url, data)
-            navigate("/login")
-            console.log(res.message)
-        }
-
-        catch(error) {
-            setError("error")
-        }
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+    
+        await signup(data.email, data.password, data.firstName, data.lastName, data.age)
     }
+
     return (
         <div className="register-form">
             <form onSubmit={handleSubmit} id="form">
