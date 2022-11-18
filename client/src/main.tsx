@@ -4,13 +4,12 @@ import App from './App'
 import {
   createBrowserRouter,
   RouterProvider,
-  Route,
 } from "react-router-dom";
-import './index.css'
-import UserProfile from './UserProfile';
+import UserProfile from './views/UserProfile';
 import RegisterView from './views/Register/RegisterView';
 import LoginView from './views/Login/LoginView';
 import DashboardView from './views/Dashboard/DashboardView';
+import Navbar from './components/Navbar/Navbar';
 
 const router = createBrowserRouter([
   {
@@ -37,6 +36,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
+    <Navbar />
     <RouterProvider router={router} />
   </React.StrictMode>
 )
