@@ -5,8 +5,11 @@ import { TUser } from '../../api/getUsers';
 import { Link, useNavigate } from "react-router-dom"
 import { useSignup } from '../../hooks/useSignup';
 
+import { useLogin } from "../../hooks/useLogin"
+
 const LoginView = () => {
     const [users, setUsers] = useState<TUser[]>([]);
+    const { login, error, isLoading } = useLogin();
     const [data, setData] = useState({
         email: "",
         password: "",
@@ -19,10 +22,14 @@ const LoginView = () => {
         })
     }
 
-      
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        await login(data.email, data.password)
+    }
+
     return (
         <div className="register-form">
-            <form id="form">
+            <form onSubmit={handleSubmit} id="form">
                 <div className="form-email">
                     <label htmlFor="email">Email</label>
                     <input id="email"
@@ -40,7 +47,8 @@ const LoginView = () => {
                     onChange={handleChange}
                     /> 
                 </div>
-                <button>Login</button>
+                {error && <h1>{error}</h1>}
+                <button disabled={isLoading}>Login</button>
             </form>
             New Customer ? <Link to="/register">Register Here</Link>
         </div>
