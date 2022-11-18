@@ -3,14 +3,14 @@ import express from "express";
 import mongoose from 'mongoose';
 import cors from "cors"
 import cookieParser from "cookie-parser";
-import { Express, Request, Response} from 'express';
+import { Express } from 'express';
 
 import { getUsersController } from "../controllers/getUsersController";
 import { deleteUserController } from "../controllers/deleteUserController";
 import { addUserController } from "../controllers/addUserController";
 import { loginUserController } from "../controllers/loginUserController";
 
-import { checkAuth } from "../middlewares/checkAuth";
+// import { checkAuth } from "../middlewares/checkAuth";
 import connectDB from "../config/db";
 
 const PORT = 5000;
@@ -39,6 +39,6 @@ app.post("/register", addUserController)
 app.post("/login", loginUserController)
 
 // Dashboard 
-app.get("/dashboard", checkAuth)
+app.get("/dashboard")
 
 app.listen(PORT);

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User from "../src/models/User"
+const { User } = require("../src/models/User");
 import bcrypt from "bcrypt"
 
 export async function addUserController(req: Request, res: Response) {
