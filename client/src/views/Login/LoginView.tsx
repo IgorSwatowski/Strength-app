@@ -1,63 +1,64 @@
-import React, { useEffect, useState } from 'react'
-import axios from "axios"
-import { Link } from "react-router-dom";
+import axios from 'axios';
+import React, { useState } from 'react'
+import { addUser } from '../../api/addUser';
+import { TUser } from '../../api/getUsers';
+import { Link, useNavigate } from "react-router-dom"
 
 const LoginView = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [login, setLogin] = useState(false);
+    const [users, setUsers] = useState<TUser[]>([]);
+    const [error, setError ] = useState("")
+    const [data, setData] = useState({
+        email: "",
+        password: "",
+    })
 
-
-  const configuration = {
-    method: "post",
-    url: "http://localhost:5000/login",
-    headers: {
-      "Content-Type" : "application/json"
-    },
-    data: {
-      email,
-      password,
-    },
-  };
-
-    async function handleLogin(e: React.FormEvent) {
-      e.preventDefault();
-      await axios(configuration)
-        .then((result) => {
-          console.log(configuration.data)
-          localStorage.setItem("userInfo", JSON.stringify(configuration.data))
-          setLogin(true);
+    const handleChange = ({ currentTarget: input}) => {
+        setData({
+            ...data,
+            [input.name]: input.value
         })
-        .catch((error) => {
-          error = new Error();
-        });
-  }
+    }
 
-  useEffect(() => {
-    const userInfo = localStorage.getItem("userInfo");
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
 
-    console.log("/dashboard", userInfo)
-  }, [])
+        try {
+            const url = "http://localhost:5000/login";
+            const { data: res } = await axios.post(url, data)
+            localStorage.setItem("userInfo", JSON.stringify(res.data))
+            console.log(res.message)
+        }
 
-  return (
-    <section className="login-view">
-      {login && (
-          <p className="text-success">You Are Logged in Successfully</p>
-        )}
-        <form id="login-form" onSubmit={handleLogin}>
-          <div className="email-input">
-            <label htmlFor="email">Email</label>
-            <input id="email" className="email" type="email" onChange={(e) => setEmail(e.target.value)}/>
-          </div>
-          <div className="password-input">
-            <label htmlFor="password">Password</label>
-            <input id="password" className="password" type="password" onChange={(e) => setPassword(e.target.value)}/>
-          </div>
-          <button type="submit">Zaloguj</button>
-        </form>
-        New Customer ? <Link to="/register">Register Here</Link>
-    </section>
-  )
+        catch(error) {
+            setError("error")
+        }
+    }
+    return (
+        <div className="register-form">
+            <form onSubmit={handleSubmit} id="form">
+                <div className="form-email">
+                    <label htmlFor="email">Email</label>
+                    <input id="email"
+                    value={data.email}
+                    name="email"
+                    onChange={handleChange}
+                    /> 
+                </div>
+                <div className="form-password">
+                    <label htmlFor="password">Password</label>
+                    <input id="password"
+                    type="password"
+                    name="password"
+                    value={data.password}
+                    onChange={handleChange}
+                    /> 
+                </div>
+                { error && <h1>{error}</h1>}
+                <button>Login</button>
+            </form>
+            New Customer ? <Link to="/register">Register Here</Link>
+        </div>
+    )
 }
 
 export default LoginView
