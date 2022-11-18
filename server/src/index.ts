@@ -1,4 +1,3 @@
-
 import { config } from "dotenv"
 import express from "express";
 import mongoose from 'mongoose';
@@ -12,11 +11,13 @@ import { addUserController } from "../controllers/addUserController";
 import { loginUserController } from "../controllers/loginUserController";
 
 import { checkAuth } from "../middlewares/checkAuth";
+import connectDB from "../config/db";
 
 const PORT = 5000;
 const app: Express = express();
 app.use(cookieParser());
 config();
+connectDB();
 
 app.use(cors(
     { 
@@ -40,7 +41,4 @@ app.post("/login", loginUserController)
 // Dashboard 
 app.get("/dashboard", checkAuth)
 
-mongoose.connect(process.env.MONGO_URL!).then(() => {
-    console.log(`Listening on port ${PORT}`)
-    app.listen(PORT);
-})
+app.listen(PORT);
