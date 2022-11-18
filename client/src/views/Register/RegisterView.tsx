@@ -1,76 +1,88 @@
+import axios from 'axios';
 import React, { useState } from 'react'
 import { addUser } from '../../api/addUser';
 import { TUser } from '../../api/getUsers';
-
+import { Link, useNavigate } from "react-router-dom"
 
 const RegisterView = () => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [age, setAge] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [users, setUsers] = useState<TUser[]>([]);
+    const [error, setError ] = useState("")
+    const [data, setData] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        age: ""
+    })
 
-    async function handleCreateUser(e: React.FormEvent) {
-        e.preventDefault();
-        const user = await addUser(firstName, lastName, age, email, password);
-        setUsers([...users, user])
-        setFirstName("")
-        setLastName("")
-        setAge("")
-        setEmail("")
-        setPassword("")
+    const navigate = useNavigate();
+
+    const handleChange = ({ currentTarget: input}) => {
+        setData({
+            ...data,
+            [input.name]: input.value
+        })
     }
-    
+
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+
+        try {
+            const url = "http://localhost:5000/register";
+            const { data: res } = await axios.post(url, data)
+            navigate("/login")
+            console.log(res.message)
+        }
+
+        catch(error) {
+            setError("error")
+        }
+    }
     return (
         <div className="register-form">
-            <form onSubmit={handleCreateUser} id="form">
+            <form onSubmit={handleSubmit} id="form">
                 <div className="form-firstName">
                     <label htmlFor="firstName">First name</label>
                     <input id="firstName"
-                    value={firstName}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                        setFirstName(e.target.value)
-                    }
+                    value={data.firstName}
+                    name="firstName"
+                    onChange={handleChange}
                     /> 
                 </div>
                 <div className="form-lastName">
                     <label htmlFor="lastName">Last name</label>
                     <input id="lastName"
-                    value={lastName}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                        setLastName(e.target.value)
-                    }
+                    value={data.lastName}
+                    name="lastName"
+                    onChange={handleChange}
                     /> 
                 </div>
                 <div className="form-age">
                     <label htmlFor="age">Age</label>
                     <input id="age"
-                    value={age}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                        setAge(e.target.value)
-                    }
+                    value={data.age}
+                    name="age"
+                    onChange={handleChange}
                     /> 
                 </div>
                 <div className="form-email">
                     <label htmlFor="email">Email</label>
                     <input id="email"
-                    value={email}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                        setEmail(e.target.value)
-                    }
+                    value={data.email}
+                    name="email"
+                    onChange={handleChange}
                     /> 
                 </div>
                 <div className="form-password">
                     <label htmlFor="password">Password</label>
                     <input id="password"
                     type="password"
-                    value={password}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                        setPassword(e.target.value)
-                    }
+                    name="password"
+                    value={data.password}
+                    onChange={handleChange}
                     /> 
                 </div>
+                { error && <h1>{error}</h1>}
                 <button>Submit</button>
             </form>
         </div>
