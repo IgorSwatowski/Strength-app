@@ -1,14 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from "axios"
+import { Link } from "react-router-dom";
 
 const LoginView = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [login, setLogin] = useState(false);
 
+
   const configuration = {
     method: "post",
     url: "http://localhost:5000/login",
+    headers: {
+      "Content-Type" : "application/json"
+    },
     data: {
       email,
       password,
@@ -18,13 +23,21 @@ const LoginView = () => {
     async function handleLogin(e: React.FormEvent) {
       e.preventDefault();
       await axios(configuration)
-      .then((result) => {
-        setLogin(true);
-      })
-      .catch((error) => {
-        error = new Error();
-      });
+        .then((result) => {
+          console.log(configuration.data)
+          localStorage.setItem("userInfo", JSON.stringify(configuration.data))
+          setLogin(true);
+        })
+        .catch((error) => {
+          error = new Error();
+        });
   }
+
+  useEffect(() => {
+    const userInfo = localStorage.getItem("userInfo");
+
+    console.log("/dashboard", userInfo)
+  }, [])
 
   return (
     <section className="login-view">
@@ -42,6 +55,7 @@ const LoginView = () => {
           </div>
           <button type="submit">Zaloguj</button>
         </form>
+        New Customer ? <Link to="/register">Register Here</Link>
     </section>
   )
 }
