@@ -1,19 +1,16 @@
-import axios from 'axios';
 import React, { useState } from 'react'
-import { addUser } from '../../api/addUser';
-import { TUser } from '../../api/getUsers';
 import { Link, useNavigate } from "react-router-dom"
-import { useSignup } from '../../hooks/useSignup';
 
 import { useLogin } from "../../hooks/useLogin"
 
 const LoginView = () => {
-    const [users, setUsers] = useState<TUser[]>([]);
     const { login, error, isLoading } = useLogin();
     const [data, setData] = useState({
         email: "",
         password: "",
     })
+
+    const navigate = useNavigate();
 
     const handleChange = ({ currentTarget: input}) => {
         setData({
@@ -25,6 +22,7 @@ const LoginView = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         await login(data.email, data.password)
+        navigate("/dashboard/users")
     }
 
     return (

@@ -1,18 +1,16 @@
 import { API_URL } from "./config";
+interface UserData {
+  email: string;
+  password: string;
+}
 
-export async function addUser(firstName: string, lastName: string, age: string, email: string, password: string) {
-    const response = await fetch(`${API_URL}/register`, { // Optimistic update, more performance
-      method: "POST",
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        age,
-        email,
-        password
-      }),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    return response.json();
+export async function addUser(userData: UserData) {
+  const response = await fetch(`${API_URL}/api/user/signup`, {
+    method: "POST",
+    body: JSON.stringify(userData),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+  return response.json();
 }
